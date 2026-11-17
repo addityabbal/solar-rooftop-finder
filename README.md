@@ -3,7 +3,7 @@
 Type one Indian pincode, get its 50 largest rooftops ranked by yearly solar saving:
 roof and usable area (sq ft), address, building type, system size, saving, subsidy, payback.
 
-**Live demo:** https://solar.adityabal.com (pre-scanned pincodes 380015, 400703, 400709).
+**Live demo:** https://solar.adityabal.com (pre-scanned pincodes 380015, 400703, 400709, 600132).
 **Write-up:** https://adityabal.com/projects/solar-rooftop-finder
 
 - `worker/` Python pipeline (boundary, footprints, Google enrichment, savings, storage)

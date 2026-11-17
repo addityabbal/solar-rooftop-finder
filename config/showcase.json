@@ -3,6 +3,7 @@
   "pincodes": [
     { "pincode": "380015", "label": "Ahmedabad" },
     { "pincode": "400703", "label": "Vashi, Navi Mumbai" },
-    { "pincode": "400709", "label": "Koparkhairane, Navi Mumbai" }
+    { "pincode": "400709", "label": "Koparkhairane, Navi Mumbai" },
+    { "pincode": "600132", "label": "Chennai" }
   ]
 }
