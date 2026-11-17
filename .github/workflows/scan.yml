@@ -1,0 +1,36 @@
+name: Scan pincode
+
+# Triggered by the web app (repository_dispatch) or by hand from the Actions tab.
+on:
+  repository_dispatch:
+    types: [scan]
+  workflow_dispatch:
+    inputs:
+      pincode:
+        description: Six-digit Indian pincode
+        required: true
+
+concurrency:
+  group: scan-${{ github.event.client_payload.pincode || inputs.pincode }}
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PINCODE: ${{ github.event.client_payload.pincode || inputs.pincode }}
+      GOOGLE_SERVER_KEY: ${{ secrets.GOOGLE_SERVER_KEY }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      ALLOW_NOMINATIM_FALLBACK: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install duckdb httpx
+      - name: Check pincode format
+        run: |
+          [[ "$PINCODE" =~ ^[1-9][0-9]{5}$ ]] || { echo "Invalid pincode"; exit 1; }
+      - run: python -m worker.run_scan "$PINCODE"

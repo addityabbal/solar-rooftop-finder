@@ -1,0 +1,16 @@
+.env
+.env.local
+web/.env.local
+node_modules/
+.next/
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+worker/.cache/
+.vercel
+# Bookings hold names and phone numbers given with consent. Never commit them.
+web/data/campaign/*.bookings.json
+.open-next/
+.wrangler/
+web/.dev.vars

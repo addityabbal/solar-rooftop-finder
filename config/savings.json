@@ -1,0 +1,76 @@
+{
+  "_note": "Every money and sizing assumption lives here. Edit values, not code. Items marked approximate in the plan should be confirmed before launch.",
+  "sqft_per_m2": 10.764,
+  "min_footprint_m2": 40,
+  "shortlist_size": 50,
+  "fallback_usable_fraction": 0.5,
+  "area_per_kw_m2": 10,
+  "kw_rounding_step": 0.5,
+  "residential_cap_kw": 10,
+  "default_yield_kwh_per_kw": 1400,
+  "sunshine_performance_ratio": 0.75,
+  "cost_per_kw_inr": 55000,
+  "range_fraction": 0.15,
+  "tariff_inr_per_unit": {
+    "default": {
+      "residential": 7,
+      "commercial": 9
+    },
+    "by_state": {}
+  },
+  "subsidy": {
+    "applies_to": [
+      "residential"
+    ],
+    "general": {
+      "slabs": [
+        {
+          "up_to_kw": 2,
+          "inr_per_kw": 30000
+        },
+        {
+          "up_to_kw": 3,
+          "inr_per_kw": 18000
+        }
+      ],
+      "cap_inr": 78000
+    },
+    "special_category": {
+      "slabs": [
+        {
+          "up_to_kw": 2,
+          "inr_per_kw": 33000
+        },
+        {
+          "up_to_kw": 3,
+          "inr_per_kw": 19800
+        }
+      ],
+      "cap_inr": 85800
+    },
+    "special_category_states": [
+      "Arunachal Pradesh",
+      "Assam",
+      "Manipur",
+      "Meghalaya",
+      "Mizoram",
+      "Nagaland",
+      "Sikkim",
+      "Tripura",
+      "Uttarakhand",
+      "Himachal Pradesh",
+      "Jammu and Kashmir",
+      "Ladakh",
+      "Andaman and Nicobar Islands",
+      "Lakshadweep"
+    ]
+  },
+  "panel": {
+    "_note": "Used only to draw the illustrative panel layout when Solar API gives no positions.",
+    "width_m": 1.1,
+    "height_m": 1.9,
+    "kw": 0.4,
+    "gap_m": 0.1,
+    "edge_margin_m": 1.0
+  }
+}

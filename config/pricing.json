@@ -1,0 +1,9 @@
+{
+  "_note": "USD per call. Left null on purpose: Google's prices change. Fill these in from https://mapsplatform.google.com/pricing/ and every scan will report its real cost. Until then scans report call counts only.",
+  "usd_per_call": {
+    "solar_building_insights": null,
+    "geocoding": null,
+    "places_nearby": null,
+    "places_details": null
+  }
+}
