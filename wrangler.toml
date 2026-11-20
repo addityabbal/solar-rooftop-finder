@@ -1,0 +1,25 @@
+# Cloudflare Pages project: static site in web/, API in functions/.
+# Deploy: npx wrangler pages deploy
+name = "solar-rooftop-finder"
+pages_build_output_dir = "web"
+compatibility_date = "2026-11-01"
+
+[vars]
+GH_REPO = "addityabbal/solar-rooftop-finder"
+DAILY_BUILD_CAP = "25"
+# Public Turnstile site key (not a secret). Set it, plus the TURNSTILE_SECRET_KEY secret, to open the quote form.
+# TURNSTILE_SITE_KEY = ""
+
+# Secrets (never in this file):
+#   npx wrangler pages secret put GH_TOKEN              # fine-grained, this repo only, "Actions: write"
+#   npx wrangler pages secret put TURNSTILE_SECRET_KEY
+
+[[kv_namespaces]]
+binding = "RESULTS"
+id = "07c20e8794564e2fad3076ae5d71ffae"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "solar-db"
+database_id = "c9f642f0-e5c5-41c9-a807-a5792239e860"
+migrations_dir = "migrations"

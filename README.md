@@ -1,120 +1,101 @@
-# Solar Rooftop Lead Finder
+# Solar Rooftop Finder
 
-Type one Indian pincode, get its 50 largest rooftops ranked by yearly solar saving:
-roof and usable area (sq ft), address, building type, system size, saving, subsidy, payback.
+Type a 6-digit Indian pincode. Get the roofs in that area ranked for solar: usable roof area in
+sq ft, system size, yearly units, rupees saved after the PM Surya Ghar subsidy, payback, an
+approximate address with a Plus Code, and a public business phone or website where one exists.
+Plus an AI summary in English and Hindi. Runs at ₹0 a month on free tiers.
 
-**Live demo:** https://solar.adityabal.com (pre-scanned pincodes 380015, 400703, 400709, 600132).
-**Write-up:** https://adityabal.com/projects/solar-rooftop-finder
+**Live:** https://solar.adityabal.com · **Case study:** https://adityabal.com/projects/solar-rooftop-finder
 
-- `worker/` Python pipeline (boundary, footprints, Google enrichment, savings, storage)
-- `web/` Next.js 15 app (search, map, table, CSV, methodology, privacy)
-- `config/` shared assumptions: `savings.json`, `pricing.json`, `showcase.json`
-- `supabase/migrations/` database schema
-- `.github/workflows/scan.yml` runs one scan when the web app asks for it
+## How it works
 
-## Run it locally (no accounts needed)
+```
+browser ──► Cloudflare Pages (web/ + functions/) ──► KV  pin:<pincode>  ── hit ──► result JSON
+                     │ miss
+                     ├─► D1 build_requests (queued, daily cap 25)
+                     └─► GitHub Actions build-pincode.yml
+                              └─ pipeline/build_pincode.py
+                                   ├─ pincode centre (Dept of Posts, checked against OSM)
+                                   ├─ DuckDB over Overture Maps on S3: buildings, places, roads
+                                   ├─ NASA POWER sunlight
+                                   ├─ solar maths + lead score  (pipeline/data/config.json)
+                                   ├─ Workers AI summary, EN + HI, number-checked
+                                   └─ writes KV + D1 status
+```
 
-Worker, from the repo root:
+The heavy work runs once per pincode in GitHub Actions; every visit after that is one KV read.
+
+## Repo
+
+| Path | What |
+| --- | --- |
+| `pipeline/` | Python pipeline. `build_pincode.py` is the entry point; `lib/` has geo, overture, solar, scoring, address, sunlight, ai_summary, publish. |
+| `pipeline/data/` | `config.json` (every assumption), `tariffs.json`, `pincode_centroids.csv`. |
+| `web/` | Static site: `index.html`, `app.js`, `styles.css`. No build step. MapLibre on OpenFreeMap tiles. |
+| `functions/api/` | Pages Functions: `pincode/[pin]`, `status/[pin]`, `lead`. |
+| `migrations/` | D1 schema. |
+| `evals/` | Number-faithfulness cases and roof-area ground truth. |
+| `docs/` | PRD, decisions, evals write-up. |
+
+## Run the pipeline locally
 
 ```bash
-python -m venv worker/.venv
+python -m venv pipeline/.venv
 ```
 
 ```bash
-worker/.venv/Scripts/python -m pip install duckdb httpx pytest
+pipeline/.venv/Scripts/python -m pip install -r pipeline/requirements.txt
 ```
 
 ```bash
-worker/.venv/Scripts/python -m pytest
+pipeline/.venv/Scripts/python pipeline/build_pincode.py 400703 --out pipeline/out/400703.json
+```
+
+On macOS/Linux use `pipeline/.venv/bin/python`. A build takes about 3–6 minutes. Without AI credentials
+the summary uses the template. For an AI summary from a laptop, run the local proxy in another terminal
+(`npx wrangler dev` in `pipeline/tools/ai-proxy`) and set `AI_PROXY_URL=http://127.0.0.1:8799`.
+To publish to KV with your own wrangler login, add `--publish --via wrangler`.
+
+Tests and evals:
+
+```bash
+cd pipeline && .venv/Scripts/python -m pytest -q
 ```
 
 ```bash
-worker/.venv/Scripts/python -m worker.run_scan 380015
+pipeline/.venv/Scripts/python evals/run_evals.py
 ```
 
-On macOS or Linux use `worker/.venv/bin/python`. A scan takes about a minute and writes
-`web/data/scans/380015.json`. Add `--force` to re-scan.
-
-Web app:
+## Deploy
 
 ```bash
-cd web
+npx wrangler pages deploy
 ```
 
-```bash
-npm install
-```
+### One-time setup that needs you
 
-```bash
-npm run dev
-```
+On-demand builds of new pincodes need two tokens. Until they exist the site serves the pre-built pincodes
+and says new ones can't be built yet.
 
-Open http://localhost:3000/p/380015. Tests: `npm test`. Production build: `npm run build`.
+1. **Cloudflare API token for GitHub Actions.** Cloudflare dashboard → My Profile → API Tokens → Create
+   Token → Custom. Permissions: Account · Workers KV Storage · Edit; Account · D1 · Edit; Account · Workers AI · Read.
+   Then in GitHub → Settings → Secrets and variables → Actions:
+   - secrets `CF_API_TOKEN` (the token) and `CF_ACCOUNT_ID`
+   - variables `KV_NAMESPACE_ID` and `D1_DATABASE_ID` (both in `wrangler.toml`)
+2. **GitHub token for the website.** GitHub → Settings → Developer settings → Fine-grained tokens:
+   only this repository, permission Actions: Read and write. Then:
 
-## What works without keys, and what needs them
+   ```bash
+   npx wrangler pages secret put GH_TOKEN --project-name solar-rooftop-finder
+   ```
 
-| Feature | No keys | Needs |
-| --- | --- | --- |
-| Building footprints, ranking, savings | Yes | Nothing |
-| Pincode boundary | Rough rectangle from OpenStreetMap | `GOOGLE_SERVER_KEY`, or a boundary file in `PINCODE_BOUNDARY_GEOJSON` |
-| Usable roof area and sunshine | Footprint x 0.5, marked estimated | `GOOGLE_SERVER_KEY` (Solar API) |
-| Address, building type | Coordinates, "Unclassified" | `GOOGLE_SERVER_KEY` (Geocoding, Places) |
-| Business contact on a row | Off | `GOOGLE_SERVER_KEY` in `web/.env.local` |
-| Google basemap | Outline map | `NEXT_PUBLIC_GOOGLE_MAPS_KEY` |
-| Shared database | JSON files in `web/data/scans` | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` |
-| Visitors scanning new pincodes | Off (pre-scanned only) | Supabase + `GITHUB_DISPATCH_TOKEN`, `GITHUB_REPO` |
-| Rate limits (3 per IP, 20 per day) | Off | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` |
+3. **Quote form.** Create a Turnstile widget for `solar.adityabal.com`, put its site key in
+   `wrangler.toml` as `TURNSTILE_SITE_KEY`, and the secret with
+   `npx wrangler pages secret put TURNSTILE_SECRET_KEY --project-name solar-rooftop-finder`.
 
-Copy `.env.example` to `.env` (worker) and to `web/.env.local` (web), then fill in what you have.
+### Staying at ₹0
 
-## Before your first paid scan
+Stay on the Workers Free plan with no card on file (over a limit, requests fail instead of billing),
+never enable R2, keep the repo public (free Actions minutes), keep the 25 builds/day cap.
 
-1. In Google Cloud: enable Solar API, Geocoding API, Places API (New), Maps JavaScript API.
-   Set a budget alert of Rs 2,000 and daily quota caps on each.
-2. Re-read the current Solar API, Geocoding and Places docs. `worker/google_client.py` was
-   written from the public API reference and has only been tested against fake responses.
-3. Fill `config/pricing.json` from the Google pricing page so scans report real cost.
-4. Run `python -m worker.enrich 380015 --limit 10` and compare three rows with Google Maps by eye.
-
-## Deploying (Cloudflare Workers)
-
-The live demo runs at https://solar.adityabal.com as a Cloudflare Worker, built with
-[OpenNext for Cloudflare](https://opennext.js.org/cloudflare). Config: `web/wrangler.jsonc`.
-
-```bash
-cd web
-```
-
-```bash
-npm run deploy
-```
-
-`npm run deploy` bundles every scan in `web/data/scans` into the app, builds it for Workers
-and deploys. On Windows, run it from a folder whose path is plain ASCII: the OpenNext build
-fails on paths with non-Latin characters.
-
-Without Supabase the deployed app is a read-only showcase: only bundled pincodes work, and
-bookings are switched off. To scan any pincode live:
-
-1. Supabase: run both files in `supabase/migrations/` in the SQL editor.
-2. GitHub: add `GOOGLE_SERVER_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` as Actions secrets.
-3. Worker secrets (`npx wrangler secret put <NAME>` in `web/`): `SUPABASE_URL`,
-   `SUPABASE_SERVICE_ROLE_KEY`, `GITHUB_DISPATCH_TOKEN`, `GITHUB_REPO`, `GOOGLE_SERVER_KEY`,
-   `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `CAMPAIGN_ADMIN_PASSWORD`.
-4. Restrict the Google browser key to the domain and the server key to the four APIs.
-
-## Campaign layer (Phase 7)
-
-- `/campaigns/<pincode>`: dashboard with Activity, Prospects, Postcards and Bookings tabs.
-- `/r/<pincode>-<roofId>`: public microsite per roof with a before/after diagram and a booking form.
-- Postcards tab downloads a print-ready 6 x 4 inch PDF per roof, with a QR code to the microsite.
-- Supabase: also run `supabase/migrations/0002_campaign.sql`.
-- Set `CAMPAIGN_ADMIN_PASSWORD` before deploying. Mailing stays off unless `MAILING_ENABLED=true`.
-
-## Not built yet
-
-- Sending postcards through a vendor API (none found; see `docs/MAILING.md`).
-- Playwright smoke test and Lighthouse pass.
-- Per-state tariff table (`tariff_inr_per_unit.by_state` in `config/savings.json` is empty).
-
-See `DECISIONS.md` for why things are the way they are.
+See `ATTRIBUTION.md` for data credits and `docs/decisions.md` for why things are the way they are.

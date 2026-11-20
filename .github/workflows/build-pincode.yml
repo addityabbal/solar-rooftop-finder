@@ -1,0 +1,38 @@
+name: build-pincode
+
+# Started by the website (GET /api/pincode/:pin on a cache miss) or by hand from the Actions tab.
+on:
+  workflow_dispatch:
+    inputs:
+      pin:
+        description: "6-digit pincode"
+        required: true
+
+concurrency:
+  group: build-${{ inputs.pin }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pipeline/requirements.txt
+      - run: pip install -r pipeline/requirements.txt
+      - name: Check pincode format
+        env:
+          PIN: ${{ inputs.pin }}
+        run: '[[ "$PIN" =~ ^[1-9][0-9]{5}$ ]] || { echo "Invalid pincode"; exit 1; }'
+      - name: Build and publish
+        env:
+          PIN: ${{ inputs.pin }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          KV_NAMESPACE_ID: ${{ vars.KV_NAMESPACE_ID }}
+          D1_DATABASE_ID: ${{ vars.D1_DATABASE_ID }}
+        run: python pipeline/build_pincode.py "$PIN" --publish

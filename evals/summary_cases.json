@@ -1,0 +1,632 @@
+[
+ {
+  "id": "c01",
+  "note": "numbers copied exactly",
+  "expect": "accept",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "Pincode 400703 has 7611 buildings and about 1,29,35,130 sq ft of usable roof, or 118.2 MW.",
+   "hi": "पिनकोड 400703 में 7611 इमारतें और 118.2 मेगावाट क्षमता है।",
+   "pitch": "Area 400703 mein payback 4.7 saal."
+  }
+ },
+ {
+  "id": "c02",
+  "note": "all numbers present",
+  "expect": "accept",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "Median payback is 4.7 years with 5.16 kWh/m² of daily sunlight.",
+   "hi": "औसत भुगतान अवधि 4.7 साल है।",
+   "pitch": "1007 commercial roofs, 458 with public contact."
+  }
+ },
+ {
+  "id": "c03",
+  "note": "phone number is stripped, rest is faithful",
+  "expect": "accept",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "1007 commercial roofs; 458 list a phone or website. Call 98765 43210 for details.",
+   "hi": "1007 व्यावसायिक छतें।",
+   "pitch": "Payback 4.7 saal."
+  }
+ },
+ {
+  "id": "c04",
+  "note": "within 1% formatting tolerance",
+  "expect": "accept",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "About 118.79 MW potential.",
+   "hi": "लगभग 118.2 मेगावाट।",
+   "pitch": "4.7 saal payback."
+  }
+ },
+ {
+  "id": "c05",
+  "note": "invented rupee figure",
+  "expect": "reject",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "Pincode 400703 could save ₹25 crore a year.",
+   "hi": "400703 में भारी बचत।",
+   "pitch": "Payback 4.7 saal."
+  }
+ },
+ {
+  "id": "c06",
+  "note": "payback changed",
+  "expect": "reject",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "Payback is just 3.2 years.",
+   "hi": "भुगतान 4.7 साल।",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c07",
+  "note": "Hindi line invents a building count",
+  "expect": "reject",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "400703 has 7611 buildings.",
+   "hi": "400703 में 8411 इमारतें हैं।",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c08",
+  "note": "pitch invents a percentage",
+  "expect": "reject",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "400703: 118.2 MW.",
+   "hi": "ok",
+   "pitch": "Aapke area mein 118.2 MW aur 40% bijli bill bachat!"
+  }
+ },
+ {
+  "id": "c09",
+  "note": "unit conversion MW to kW not in input",
+  "expect": "reject",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "Roofs total 118200 kW and 7611 buildings.",
+   "hi": "ok",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c10",
+  "note": "derived figure not in input",
+  "expect": "reject",
+  "input": {
+   "pincode": "400703",
+   "place": "Turbhe Market, Thane, Maharashtra",
+   "buildings": 7611,
+   "usable_sqft_total": "1,29,35,130",
+   "potential_mw": 118.2,
+   "median_payback_years": 4.7,
+   "sunlight_kwh_m2_day": 5.16,
+   "commercial_roofs": 1007,
+   "roofs_with_public_contact": 458
+  },
+  "output": {
+   "en": "Sunlight is 5.16 kWh, so each home saves ₹51600 a year.",
+   "hi": "ok",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c11",
+  "note": "numbers copied exactly",
+  "expect": "accept",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "Pincode 380015 has 9240 buildings and about 98,41,200 sq ft of usable roof, or 91.4 MW.",
+   "hi": "पिनकोड 380015 में 9240 इमारतें और 91.4 मेगावाट क्षमता है।",
+   "pitch": "Area 380015 mein payback 4.2 saal."
+  }
+ },
+ {
+  "id": "c12",
+  "note": "all numbers present",
+  "expect": "accept",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "Median payback is 4.2 years with 5.58 kWh/m² of daily sunlight.",
+   "hi": "औसत भुगतान अवधि 4.2 साल है।",
+   "pitch": "640 commercial roofs, 212 with public contact."
+  }
+ },
+ {
+  "id": "c13",
+  "note": "phone number is stripped, rest is faithful",
+  "expect": "accept",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "640 commercial roofs; 212 list a phone or website. Call 98765 43210 for details.",
+   "hi": "640 व्यावसायिक छतें।",
+   "pitch": "Payback 4.2 saal."
+  }
+ },
+ {
+  "id": "c14",
+  "note": "within 1% formatting tolerance",
+  "expect": "accept",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "About 91.86 MW potential.",
+   "hi": "लगभग 91.4 मेगावाट।",
+   "pitch": "4.2 saal payback."
+  }
+ },
+ {
+  "id": "c15",
+  "note": "invented rupee figure",
+  "expect": "reject",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "Pincode 380015 could save ₹25 crore a year.",
+   "hi": "380015 में भारी बचत।",
+   "pitch": "Payback 4.2 saal."
+  }
+ },
+ {
+  "id": "c16",
+  "note": "payback changed",
+  "expect": "reject",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "Payback is just 2.7 years.",
+   "hi": "भुगतान 4.2 साल।",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c17",
+  "note": "Hindi line invents a building count",
+  "expect": "reject",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "380015 has 9240 buildings.",
+   "hi": "380015 में 10040 इमारतें हैं।",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c18",
+  "note": "pitch invents a percentage",
+  "expect": "reject",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "380015: 91.4 MW.",
+   "hi": "ok",
+   "pitch": "Aapke area mein 91.4 MW aur 40% bijli bill bachat!"
+  }
+ },
+ {
+  "id": "c19",
+  "note": "unit conversion MW to kW not in input",
+  "expect": "reject",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "Roofs total 91400 kW and 9240 buildings.",
+   "hi": "ok",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c20",
+  "note": "derived figure not in input",
+  "expect": "reject",
+  "input": {
+   "pincode": "380015",
+   "place": "Azad Society, Ahmadabad, Gujarat",
+   "buildings": 9240,
+   "usable_sqft_total": "98,41,200",
+   "potential_mw": 91.4,
+   "median_payback_years": 4.2,
+   "sunlight_kwh_m2_day": 5.58,
+   "commercial_roofs": 640,
+   "roofs_with_public_contact": 212
+  },
+  "output": {
+   "en": "Sunlight is 5.58 kWh, so each home saves ₹55800 a year.",
+   "hi": "ok",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c21",
+  "note": "numbers copied exactly",
+  "expect": "accept",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "Pincode 682001 has 3105 buildings and about 31,20,880 sq ft of usable roof, or 29.0 MW.",
+   "hi": "पिनकोड 682001 में 3105 इमारतें और 29.0 मेगावाट क्षमता है।",
+   "pitch": "Area 682001 mein payback 5.3 saal."
+  }
+ },
+ {
+  "id": "c22",
+  "note": "all numbers present",
+  "expect": "accept",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "Median payback is 5.3 years with 4.92 kWh/m² of daily sunlight.",
+   "hi": "औसत भुगतान अवधि 5.3 साल है।",
+   "pitch": "402 commercial roofs, 97 with public contact."
+  }
+ },
+ {
+  "id": "c23",
+  "note": "phone number is stripped, rest is faithful",
+  "expect": "accept",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "402 commercial roofs; 97 list a phone or website. Call 98765 43210 for details.",
+   "hi": "402 व्यावसायिक छतें।",
+   "pitch": "Payback 5.3 saal."
+  }
+ },
+ {
+  "id": "c24",
+  "note": "within 1% formatting tolerance",
+  "expect": "accept",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "About 29.14 MW potential.",
+   "hi": "लगभग 29.0 मेगावाट।",
+   "pitch": "5.3 saal payback."
+  }
+ },
+ {
+  "id": "c25",
+  "note": "invented rupee figure",
+  "expect": "reject",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "Pincode 682001 could save ₹25 crore a year.",
+   "hi": "682001 में भारी बचत।",
+   "pitch": "Payback 5.3 saal."
+  }
+ },
+ {
+  "id": "c26",
+  "note": "payback changed",
+  "expect": "reject",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "Payback is just 3.8 years.",
+   "hi": "भुगतान 5.3 साल।",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c27",
+  "note": "Hindi line invents a building count",
+  "expect": "reject",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "682001 has 3105 buildings.",
+   "hi": "682001 में 3905 इमारतें हैं।",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c28",
+  "note": "pitch invents a percentage",
+  "expect": "reject",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "682001: 29.0 MW.",
+   "hi": "ok",
+   "pitch": "Aapke area mein 29.0 MW aur 40% bijli bill bachat!"
+  }
+ },
+ {
+  "id": "c29",
+  "note": "unit conversion MW to kW not in input",
+  "expect": "reject",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "Roofs total 29000 kW and 3105 buildings.",
+   "hi": "ok",
+   "pitch": "ok"
+  }
+ },
+ {
+  "id": "c30",
+  "note": "derived figure not in input",
+  "expect": "reject",
+  "input": {
+   "pincode": "682001",
+   "place": "Ernakulam, Kerala",
+   "buildings": 3105,
+   "usable_sqft_total": "31,20,880",
+   "potential_mw": 29.0,
+   "median_payback_years": 5.3,
+   "sunlight_kwh_m2_day": 4.92,
+   "commercial_roofs": 402,
+   "roofs_with_public_contact": 97
+  },
+  "output": {
+   "en": "Sunlight is 4.92 kWh, so each home saves ₹49200 a year.",
+   "hi": "ok",
+   "pitch": "ok"
+  }
+ }
+]

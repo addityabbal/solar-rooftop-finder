@@ -1,0 +1,5 @@
+{
+  "_note": "Rupees per kWh. APPROXIMATE national defaults until each state's tariff order is entered by hand under 'states', e.g. \"Maharashtra\": {\"residential\": 8.5, \"commercial\": 12}. State names must match pipeline/data/pincode_centroids.csv. The app labels these figures approximate.",
+  "default": { "residential": 7, "commercial": 9 },
+  "states": {}
+}

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Solar Rooftop Finder — rooftops worth a solar site visit</title>
+  <meta name="description" content="Type an Indian pincode and get its rooftops ranked for solar: usable area, system size, yearly saving after PM Surya Ghar subsidy, and payback. Built on open data." />
+  <meta property="og:title" content="Solar Rooftop Finder" />
+  <meta property="og:description" content="One pincode in. The rooftops worth a solar site visit out." />
+  <meta name="theme-color" content="#0f1b2d" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='9' fill='%23e8890c'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin />
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-row">
+      <a class="brand" href="/"><span class="dot" aria-hidden="true"></span>Solar Rooftop Finder</a>
+      <button class="link" type="button" data-open="how">How we calculate</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" id="hero">
+      <p class="eyebrow">For solar installers in India</p>
+      <h1>Find the rooftops worth a site visit.</h1>
+      <p class="lead">Type a pincode. Get its roofs ranked by usable area, sunlight, payback and whether a business is reachable today.</p>
+    </section>
+
+    <form class="search" id="search" novalidate>
+      <label for="pin" class="sr-only">Pincode</label>
+      <input id="pin" name="pin" inputmode="numeric" autocomplete="postal-code" maxlength="6" placeholder="6-digit pincode" />
+      <button type="submit">Find rooftops</button>
+    </form>
+    <p class="chips" id="chips"><span class="muted">Ready to view:</span></p>
+    <p class="error" id="search-error" role="alert" hidden></p>
+
+    <section id="status" class="panel status" role="status" aria-live="polite" hidden></section>
+
+    <section id="result" hidden>
+      <div class="result-head">
+        <div>
+          <p class="muted" id="place"></p>
+          <h2 id="title"></h2>
+          <p class="muted small" id="built"></p>
+        </div>
+      </div>
+
+      <dl class="cards" id="cards"></dl>
+
+      <article class="panel summary">
+        <div class="summary-head">
+          <h3>Summary</h3>
+          <div class="toggle" role="group" aria-label="Summary language">
+            <button type="button" data-lang="en" aria-pressed="true">EN</button>
+            <button type="button" data-lang="hi" aria-pressed="false">हिं</button>
+          </div>
+        </div>
+        <p id="summary-text" class="summary-text"></p>
+        <details class="pitch">
+          <summary>Installer pitch (WhatsApp-length)</summary>
+          <p id="pitch-text"></p>
+          <button type="button" class="link" id="copy-pitch">Copy pitch</button>
+        </details>
+        <p class="muted small" id="summary-source"></p>
+      </article>
+
+      <div class="split">
+        <div class="map-wrap">
+          <div id="map" role="application" aria-label="Map of rooftops coloured by lead score"></div>
+          <div class="legend"><span>Lower score</span><span class="ramp" aria-hidden="true"></span><span>Higher</span></div>
+        </div>
+        <aside class="panel roof" id="roof" aria-live="polite">
+          <p class="muted">Select a roof on the map or in the table to see its numbers.</p>
+        </aside>
+      </div>
+
+      <div class="filters">
+        <label>Min usable area (sq ft)
+          <input id="f-area" inputmode="numeric" placeholder="Any" />
+        </label>
+        <label class="check"><input type="checkbox" id="f-commercial" /> Commercial only</label>
+        <label class="check"><input type="checkbox" id="f-contact" /> Has public contact</label>
+        <button type="button" id="csv" class="secondary">Download CSV</button>
+      </div>
+      <p class="muted small" id="count"></p>
+
+      <div class="table-wrap">
+        <table id="table">
+          <thead>
+            <tr>
+              <th data-sort="rank" class="num">#</th>
+              <th data-sort="score" class="num">Score</th>
+              <th data-sort="type">Type</th>
+              <th data-sort="address">Address</th>
+              <th data-sort="usable_sqft" class="num">Usable sq ft</th>
+              <th data-sort="kw" class="num">kW</th>
+              <th data-sort="saving_year" class="num">₹ / year</th>
+              <th data-sort="payback_years" class="num">Payback</th>
+              <th>Contact</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="muted small">Every figure is an estimate, not a quotation. Tariffs are approximate. See “How we calculate”.</p>
+    </section>
+
+    <section class="panel lead" id="lead">
+      <h3>Own a roof? Get a free quote.</h3>
+      <p class="muted">Share your details only if you want installers to call you. We never collect contact details any other way.</p>
+      <form id="lead-form" novalidate>
+        <div class="grid2">
+          <label>Name <input name="name" autocomplete="name" maxlength="80" /></label>
+          <label>Mobile number <input name="phone" inputmode="numeric" autocomplete="tel-national" maxlength="10" required /></label>
+          <label>Pincode <input name="pin" inputmode="numeric" maxlength="6" required /></label>
+          <label>Monthly electricity bill (₹) <input name="monthly_bill_inr" inputmode="numeric" maxlength="7" /></label>
+        </div>
+        <label class="check consent"><input type="checkbox" name="consent" /> <span id="consent-text"></span></label>
+        <div id="turnstile"></div>
+        <button type="submit">Request a quote</button>
+        <p class="small" id="lead-msg" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <dialog id="how" class="drawer">
+    <div class="drawer-head">
+      <h2>How we calculate</h2>
+      <button type="button" class="link" data-close>Close</button>
+    </div>
+    <div id="how-body"></div>
+  </dialog>
+
+  <footer class="wrap foot small muted">
+    <p>Estimates, not quotations. No personal data about residents is collected; contacts shown are public business listings.</p>
+    <p>Data: building footprints © Overture Maps Foundation (incl. Google Open Buildings CC BY 4.0, Microsoft ML Buildings ODbL, OpenStreetMap ODbL); places and roads © Overture Maps / OpenStreetMap contributors; sunlight: NASA POWER; pincodes: Department of Posts (GODL-India); map tiles: OpenFreeMap, © OpenStreetMap contributors. <a href="https://github.com/addityabbal/solar-rooftop-finder">Source on GitHub</a>.</p>
+  </footer>
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" defer></script>
+  <script src="app.js" type="module"></script>
+</body>
+</html>

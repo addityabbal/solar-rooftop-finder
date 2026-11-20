@@ -1,0 +1,49 @@
+{
+  "_note": "Every assumption the numbers depend on. Shown in the app's 'How we calculate' drawer. Edit here, not in code.",
+  "overture_release": "2026-11-18.0",
+  "bbox_half_km": 1.5,
+  "min_footprint_m2": 25,
+  "usable_factor": 0.6,
+  "usable_factor_small": 0.5,
+  "small_footprint_m2": 60,
+  "m2_per_kw": 10,
+  "kw_step": 0.5,
+  "performance_ratio": 0.75,
+  "cost_per_kw_inr": 60000,
+  "default_sunlight_kwh_m2_day": 5.0,
+  "sqft_per_m2": 10.764,
+  "subsidy": {
+    "scheme": "PM Surya Ghar Muft Bijli Yojana",
+    "applies_to": ["residential"],
+    "slabs": [
+      { "up_to_kw": 2, "inr_per_kw": 30000 },
+      { "up_to_kw": 3, "inr_per_kw": 18000 }
+    ],
+    "cap_inr": 78000
+  },
+  "score_weights": {
+    "area": 40,
+    "sunlight": 20,
+    "public_contact": 20,
+    "commercial": 10,
+    "payback": 10
+  },
+  "score_ranges": {
+    "usable_area_m2": [30, 400],
+    "sunlight_kwh_m2_day": [4.0, 6.0],
+    "payback_years_max": 10
+  },
+  "top_n": 500,
+  "adoption_share_for_headline": 0.1,
+  "centroid_check": {
+    "agree_km": 5,
+    "neighbour_prefix_digits": 4,
+    "min_km": 15,
+    "spread_multiple": 3
+  },
+  "ai": {
+    "model": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "max_words": 80,
+    "number_tolerance": 0.01
+  }
+}
