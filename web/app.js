@@ -366,9 +366,10 @@ async function setupChips() {
 }
 
 function init() {
-  $("#search").addEventListener("submit", (e) => { e.preventDefault(); load($("#pin").value.trim()); });
+  // Analytics (adityabal.com/a.js): record that a pincode was asked for, never which one.
+  $("#search").addEventListener("submit", (e) => { e.preventDefault(); window.abTrack?.("demo_query", { target: "solar", detail: "typed" }); load($("#pin").value.trim()); });
   $("#pin").addEventListener("input", (e) => (e.target.value = e.target.value.replace(/\D/g, "")));
-  $("#chips").addEventListener("click", (e) => { const b = e.target.closest("[data-pin]"); if (b) load(b.dataset.pin); });
+  $("#chips").addEventListener("click", (e) => { const b = e.target.closest("[data-pin]"); if (b) { window.abTrack?.("demo_query", { target: "solar", detail: "chip" }); load(b.dataset.pin); } });
   document.querySelectorAll(".toggle button").forEach((b) => b.addEventListener("click", () => { state.lang = b.dataset.lang; renderSummary(); }));
   $("#copy-pitch").addEventListener("click", async () => {
     await navigator.clipboard?.writeText($("#pitch-text").textContent);
